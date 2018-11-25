@@ -18,7 +18,7 @@ class OkHttpWebSocket internal constructor(
     private val connectionEstablisher: ConnectionEstablisher
 ) : WebSocket {
 
-    override fun open(): Stream<WebSocket.Event> = okHttpWebSocketEventObserver.observe()
+    override fun open(): Stream<WebSocket.Event> = okHttpWebSocketEventObserver.observe().onBackpressureBuffer()
         .doOnSubscribe {
             connectionEstablisher.establishConnection(okHttpWebSocketEventObserver)
         }
@@ -64,9 +64,9 @@ class OkHttpWebSocket internal constructor(
     }
 
     class Factory(
-        private val connectionEstablisher: ConnectionEstablisher
+            private val connectionEstablisher: ConnectionEstablisher
     ) : WebSocket.Factory {
         override fun create(): WebSocket =
-            OkHttpWebSocket(OkHttpWebSocketHolder(), OkHttpWebSocketEventObserver(), connectionEstablisher)
+                OkHttpWebSocket(OkHttpWebSocketHolder(), OkHttpWebSocketEventObserver(), connectionEstablisher)
     }
 }

@@ -40,7 +40,7 @@ internal class Connection(
 
     fun startForever() = stateManager.subscribe()
 
-    fun observeEvent(): Flowable<Event> = stateManager.observeEvent()
+    fun observeEvent(): Flowable<Event> = stateManager.observeEvent().onBackpressureBuffer()
 
     fun send(message: Message): Boolean {
         val state = stateManager.state
