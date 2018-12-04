@@ -160,7 +160,7 @@ internal class Connection(
             onTransition { transition ->
                 transition.let {
                     if (it is Valid && it.fromState != it.toState) {
-                        eventProcessor.onNext(Event.OnStateChange(state))
+                        eventProcessor.offer(Event.OnStateChange(state))
                     }
                 }
             }
@@ -173,7 +173,7 @@ internal class Connection(
         }
 
         fun handleEvent(event: Event) {
-            eventProcessor.onNext(event)
+            eventProcessor.offer(event)
             stateMachine.transition(event)
         }
 
